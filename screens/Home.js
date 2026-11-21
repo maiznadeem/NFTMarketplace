@@ -3,31 +3,50 @@ import { View, FlatList, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getDatabase, ref, onValue } from '@react-native-firebase/database';
 
-import { COLORS, FONTS, SIZES } from '../constants'
+import { FONTS, SIZES } from '../constants'
+import { useTheme } from '../context/ThemeContext';
 import { HomeHeader, FocusedStatusBar, NFTCard } from '../components';
+import { appCheckReady } from '../firebase/appCheck';
 
 const Home = () => {
   const insets = useSafeAreaInsets()
+  const { colors } = useTheme()
   const [nftData, setNftData] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
   const [query, setQuery] = useState('')
 
   useEffect(() => {
+    let loaded = false
+    const fail = () => {
+      if (loaded) return
+      setLoadFailed(true)
+      setLoading(false)
+    }
     const dbRef = ref(getDatabase(), 'NFTData')
     const unsubscribe = onValue(
       dbRef,
       (snapshot) => {
+        loaded = true
         const value = snapshot.val()
         // Realtime Database returns an array or an object keyed by id; ignore null entries.
         setNftData(value ? Object.values(value).filter(Boolean) : [])
+        setLoadFailed(false)
         setLoading(false)
       },
       (error) => {
         console.warn('Failed to load NFTData', error)
-        setLoading(false)
+        fail()
       }
     )
-    return unsubscribe
+    // The database requires App Check. On a device that can't be attested, reads are refused without
+    // an error callback, so report the failure instead of showing "Loading..." forever.
+    appCheckReady.then((ok) => { if (!ok) fail() })
+    const timeout = setTimeout(fail, 15000)
+    return () => {
+      clearTimeout(timeout)
+      unsubscribe()
+    }
   }, [])
 
   const visibleData = useMemo(() => {
@@ -37,8 +56,8 @@ const Home = () => {
   }, [nftData, query])
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      <FocusedStatusBar barStyle='light-content' backgroundColor='transparent' translucent={true} />
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: colors.headerBg }}>
+      <FocusedStatusBar barStyle={colors.statusBar} backgroundColor='transparent' translucent={true} />
       <View style={{ flex: 1 }}>
         <View style={{ zIndex: 0 }}>
           <FlatList
@@ -52,9 +71,9 @@ const Home = () => {
                 textAlign: 'center',
                 marginTop: SIZES.extraLarge,
                 fontFamily: FONTS.regular,
-                color: COLORS.gray,
+                color: colors.textSubtle,
               }}>
-                {loading ? 'Loading...' : 'No NFTs found'}
+                {loading ? 'Loading...' : loadFailed ? 'Couldn’t load NFTs on this device.' : 'No NFTs found'}
               </Text>
             }
           />
@@ -67,8 +86,8 @@ const Home = () => {
           left: 0,
           zIndex:-1,
         }}>
-          <View style={{ height: 300 + insets.top, backgroundColor: COLORS.primary }} />
-          <View style={{ flex: 1, backgroundColor: COLORS.white }} />
+          <View style={{ height: 300 + insets.top, backgroundColor: colors.headerBg }} />
+          <View style={{ flex: 1, backgroundColor: colors.background }} />
         </View>
       </View>
     </View>

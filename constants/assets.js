@@ -6,10 +6,10 @@ import search from "../assets/icons/search.png";
 
 import logo from "../assets/images/logo.png";
 
-let person01 = "https://nft-marketplace-d54bc.web.app/images/people/person01.png";
-let person02 ="https://nft-marketplace-d54bc.web.app/images/people/person02.png";
-let person03 = "https://nft-marketplace-d54bc.web.app/images/people/person03.png";
-let person04 = "https://nft-marketplace-d54bc.web.app/images/people/person04.png";
+import person01 from "../assets/images/person01.png";
+import person02 from "../assets/images/person02.png";
+import person03 from "../assets/images/person03.png";
+import person04 from "../assets/images/person04.png";
 
 export default {
   badge,

@@ -1,20 +1,24 @@
 import { View, Image, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { COLORS, SIZES, SHADOWS, assets } from '../constants'
+import { SIZES, assets } from '../constants'
+import { useTheme } from '../context/ThemeContext';
 import { CircleButton, RectButton } from './Button';
 import { SubInfo, EthPrice, NFTTitle } from './SubInfo';
 
 
 const NFTCard = ({ data }) => {
   const navigation = useNavigation();
+  const { colors, shadows, isDark } = useTheme();
   return (
     <View style={{
-      backgroundColor: COLORS.white,
+      backgroundColor: colors.surface,
+      borderWidth: isDark ? 1 : 0,
+      borderColor: colors.border,
       borderRadius: SIZES.font,
       marginBottom: SIZES.extraLarge,
       margin: SIZES.base,
-      ...SHADOWS.dark,
+      ...shadows.dark,
     }}>
       <View style={{ width: '100%', height: 250 }}>
         <Image 

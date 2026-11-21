@@ -7,9 +7,14 @@ param(
   [string]$KeystorePath = 'C:\Users\maizn\.keystores\nftmarketplace-release.jks',
   [string]$KeyAlias = 'nftmarketplace',
   [string]$SecretName = 'nftmarketplace-keystore-password',
-  [switch]$SkipPrebuild
+  [switch]$SkipPrebuild,
+  # Only for local emulator testing: allows EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN to be baked into the build.
+  [switch]$AllowAppCheckDebugToken
 )
 $ErrorActionPreference = 'Stop'
+if ($env:EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN -and -not $AllowAppCheckDebugToken) {
+  throw 'EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN is set: a release build must not embed an App Check debug token. Unset it, or pass -AllowAppCheckDebugToken for a local test build.'
+}
 $repo = Split-Path -Parent $PSScriptRoot
 Set-Location $repo
 

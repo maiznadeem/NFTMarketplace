@@ -1,8 +1,10 @@
 import { View, Text, Image } from 'react-native';
 import { EthPrice } from './SubInfo';
-import { COLORS, SIZES, FONTS } from '../constants';
+import { SIZES, FONTS } from '../constants';
+import { useTheme } from '../context/ThemeContext';
 
 const DetailsBid = ({ bid }) => {
+  const { colors } = useTheme();
   return (
     <View style={{
         width: '100%',
@@ -21,12 +23,12 @@ const DetailsBid = ({ bid }) => {
         <Text style={{
             fontFamily:FONTS.semiBold,
             fontSize: SIZES.small,
-            color: COLORS.primary,
+            color: colors.text,
         }}>Bid placed by {bid.name}</Text>
         <Text style={{
             fontFamily:FONTS.regular,
             fontSize: SIZES.small-2,
-            color: COLORS.secondary,
+            color: colors.textMuted,
             marginTop: 3,
         }}>{bid.date}</Text>
       </View>
