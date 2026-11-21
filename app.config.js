@@ -13,6 +13,8 @@ module.exports = {
     version,
     orientation: 'portrait',
     icon: './assets/icon.png',
+    // The app themes itself (system default, user override); window background is set at runtime.
+    userInterfaceStyle: 'automatic',
     platforms: ['android'],
     android: {
       package: 'com.himaiz.nftmarketplace',
@@ -38,6 +40,7 @@ module.exports = {
       'expo-font',
       './plugins/withReleaseSigning',
       './plugins/withCmakeVersion',
+      './plugins/withNoForceDark',
     ],
   },
 };

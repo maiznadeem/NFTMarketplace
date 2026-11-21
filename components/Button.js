@@ -1,9 +1,12 @@
 import { TouchableOpacity, View, Text, Image } from 'react-native'
 import React from 'react';
 
-import { COLORS, SIZES, FONTS, SHADOWS } from '../constants';
+import { COLORS, SIZES, FONTS } from '../constants';
+import { useTheme } from '../context/ThemeContext';
 
 export const CircleButton = ({ imgURL, handlePress, ...props }) => {
+  const { shadows } = useTheme();
+  // Floats over photos, so it stays white (dark icons) in both modes.
   return (
     <TouchableOpacity
         style={{
@@ -14,7 +17,7 @@ export const CircleButton = ({ imgURL, handlePress, ...props }) => {
             borderRadius: SIZES.extraLarge,
             alignItems: 'center',
             justifyContent: 'center',
-            ...SHADOWS.light,
+            ...shadows.light,
             ...props,
         }}
         onPress={handlePress}
@@ -29,10 +32,11 @@ export const CircleButton = ({ imgURL, handlePress, ...props }) => {
 }
 
 export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
+    const { colors } = useTheme();
     return (
     <TouchableOpacity
         style={{
-            backgroundColor: COLORS.primary,
+            backgroundColor: colors.buttonBg,
             borderRadius: SIZES.extraLarge,
             minWidth: minWidth,
             padding: SIZES.small,
@@ -43,7 +47,7 @@ export const RectButton = ({ minWidth, fontSize, handlePress, ...props }) => {
         <Text style={{
             fontFamily: FONTS.semiBold,
             fontSize: fontSize,
-            color: COLORS.white,
+            color: colors.buttonText,
             textAlign: 'center',
         }}>Place a bid</Text>
     </TouchableOpacity>

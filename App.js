@@ -1,22 +1,19 @@
 import 'react-native-gesture-handler';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 
+import { appCheckReady } from './firebase/appCheck';
+
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Home from './screens/Home';
 import Details from './screens/Details';
 
 const Stack = createStackNavigator();
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: 'transparent'
-  }
-}
-
-const App = () => {
+const AppContent = () => {
+  const { colors, isDark, ready } = useTheme();
 
   const [loaded] = useFonts({
     InterBold: require('./assets/fonts/Inter-Bold.ttf'),
@@ -26,7 +23,24 @@ const App = () => {
     InterLight: require('./assets/fonts/Inter-Light.ttf'),
   });
 
-  if (!loaded) return null;
+  // Wait for the first App Check token so the first database read is already attested.
+  const [appCheckDone, setAppCheckDone] = useState(false);
+  useEffect(() => { appCheckReady.finally(() => setAppCheckDone(true)); }, []);
+
+  if (!loaded || !ready || !appCheckDone) return null;
+
+  const base = isDark ? DarkTheme : DefaultTheme;
+  const theme = {
+    ...base,
+    colors: {
+      ...base.colors,
+      background: colors.background,
+      card: colors.surface,
+      text: colors.text,
+      border: colors.border,
+      primary: colors.buttonBg,
+    },
+  };
 
   return (
       <NavigationContainer theme={theme} >
@@ -38,5 +52,11 @@ const App = () => {
   );
 
 }
+
+const App = () => (
+  <ThemeProvider>
+    <AppContent />
+  </ThemeProvider>
+);
 
 export default App;

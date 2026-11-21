@@ -1,11 +1,14 @@
 import { View, Text, Image, TextInput } from 'react-native';
 
-import { COLORS, FONTS, SIZES, assets } from '../constants';
+import { FONTS, SIZES, assets } from '../constants';
+import { useTheme } from '../context/ThemeContext';
+import ThemeToggle from './ThemeToggle';
 
 const HomeHeader = ({ onSearch }) => {
+  const { colors } = useTheme();
   return (
     <View style={{
-      backgroundColor: COLORS.primary,
+      backgroundColor: colors.headerBg,
       padding: SIZES.font,
 
     }}>
@@ -19,9 +22,11 @@ const HomeHeader = ({ onSearch }) => {
         resizeMode='contain'
         style={{ width: 90, height: 25 }}
         />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <ThemeToggle style={{ marginRight: SIZES.small }} />
         <View style={{ width: 45, height: 45 }}>
           <Image
-            source={{uri: assets.person01}}
+            source={assets.person01}
             resizeMode='contain'
             style={{
               width: '100%',
@@ -40,17 +45,18 @@ const HomeHeader = ({ onSearch }) => {
             }}
           />
         </View>
+        </View>
       </View>
       <View style={{ marginVertical: SIZES.font }}>
         <Text style={{
           fontFamily: FONTS.regular,
           fontSize: SIZES.small,
-          color: COLORS.white,
+          color: colors.headerText,
         }}>Hello, Victoria 👋</Text>
         <Text style={{
           fontFamily: FONTS.bold,
           fontSize: SIZES.large,
-          color: COLORS.white,
+          color: colors.headerText,
           marginTop: SIZES.base/2,
         }}>Let's find a masterpiece</Text>
       </View>
@@ -58,7 +64,7 @@ const HomeHeader = ({ onSearch }) => {
         <View style={{
           width: '100%',
           borderRadius: SIZES.font,
-          backgroundColor: COLORS.gray,
+          backgroundColor: colors.inputBg,
           flexDirection: 'row',
           alignItems: 'center',
           paddingHorizontal: SIZES.font,
@@ -71,7 +77,8 @@ const HomeHeader = ({ onSearch }) => {
           />
           <TextInput 
             placeholder='Search NFTs...'
-            style={{ flex: 1, color: COLORS.white }}
+            placeholderTextColor={colors.inputPlaceholder}
+            style={{ flex: 1, color: colors.inputText }}
             onChangeText={onSearch}
           />
         </View>

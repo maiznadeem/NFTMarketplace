@@ -1,6 +1,6 @@
 {
   "name": "nftmarketplace",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -11,7 +11,10 @@
     "version:major": "npm version major --no-git-tag-version"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.0.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-firebase/app": "^27.1.1",
+    "@react-native-firebase/app-check": "^27.1.1",
     "@react-native-firebase/database": "^27.1.1",
     "@react-navigation/native": "^7.5.2",
     "@react-navigation/stack": "^7.12.2",
@@ -19,6 +22,7 @@
     "expo-font": "~58.0.12",
     "expo-splash-screen": "~58.0.14",
     "expo-status-bar": "~58.0.5",
+    "expo-system-ui": "~58.0.7",
     "react": "19.3.0",
     "react-native": "0.88.1",
     "react-native-gesture-handler": "~3.3.0",

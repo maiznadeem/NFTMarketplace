@@ -27,6 +27,12 @@ You can download the Android build of the app from here: [NFT Marketplace App (a
 1. Clone this repository and run `npm install`.
 2. Start Metro with `npm start`. Firebase is native, so use a development build (`npx expo run:android`), not Expo Go.
 
+## Firebase
+
+The app reads `NFTData` from the Realtime Database; NFT and bid images are stored in it as data URIs (source files in `data/images/`). Database rules (`database.rules.json`) allow reading only that node, and App Check enforcement means only this app, signed with the release key and running on a genuine device, can read it. Rooted devices, custom ROMs and most emulators can't load data.
+
+To test on an emulator, register an App Check debug token in the Firebase console and build with `EXPO_PUBLIC_APPCHECK_DEBUG_TOKEN` set. Never publish a build made with a debug token.
+
 ## Build a release APK
 
 Requires the Android SDK, a JDK, and the release keystore (the password is read from the local secret store).
@@ -53,8 +59,8 @@ Always sign with the same release keystore, or Android will refuse to install th
 ## Technologies Used
 
 - React Native with Expo SDK 58
-- React Native Firebase (Realtime Database)
-- Firebase Hosting (NFT and profile images, `hosting/`)
+- React Native Firebase: Realtime Database, protected by App Check (Play Integrity)
+- Light and dark themes (follows the system, toggle in the header)
 - React Navigation
 
 ## Contributing

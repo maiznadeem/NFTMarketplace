@@ -1,9 +1,11 @@
 import { View, Text } from 'react-native';
 import { useState } from 'react';
 import { EthPrice, NFTTitle } from './SubInfo';
-import { COLORS, SIZES, FONTS } from '../constants';
+import { SIZES, FONTS } from '../constants';
+import { useTheme } from '../context/ThemeContext';
 
 const DetailsDesc = ({ data }) => {
+    const { colors } = useTheme();
 
     const [text, setText] = useState(data.description.slice(0, 100))
     const [readmore, setReadmore] = useState(false)
@@ -27,13 +29,13 @@ const DetailsDesc = ({ data }) => {
             <Text style={{
                 fontSize: SIZES.font,
                 fontFamily: FONTS.semiBold,
-                color: COLORS.primary,
+                color: colors.text,
             }}>Description</Text>
             <View style={{ marginTop: SIZES.base }}>
             <Text style={{
                 fontSize: SIZES.small,
                 fontFamily: FONTS.regular,
-                color: COLORS.secondary,
+                color: colors.textMuted,
                 lineHeight:SIZES.large
             }}>
                     {text}
@@ -41,7 +43,7 @@ const DetailsDesc = ({ data }) => {
                     <Text style={{
                         fontSize: SIZES.small,
                         fontFamily: FONTS.bold,
-                        color: COLORS.primary
+                        color: colors.text
                     }}
                     onPress={()=>{
                         if(!readmore){

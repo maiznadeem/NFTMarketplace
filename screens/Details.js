@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { COLORS, SIZES, SHADOWS, FONTS, assets } from '../constants';
+import { SIZES, FONTS, assets } from '../constants';
+import { useTheme } from '../context/ThemeContext';
 import { CircleButton, RectButton, SubInfo, FocusedStatusBar, DetailsDesc, DetailsBid } from '../components';
 
 const DetailsHeader = ({data, navigation}) => (
@@ -27,11 +28,12 @@ const DetailsHeader = ({data, navigation}) => (
 
 const Details = ({ route, navigation }) => {
   const { data } = route.params;
+  const { colors, shadows } = useTheme();
   
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView edges={['bottom']} style={{ flex: 1, backgroundColor: colors.background }}>
       <FocusedStatusBar 
-        barStyle='dark-content'
+        barStyle={colors.statusBar}
         backgroundColor='transparent'
         translucent={true}
       />
@@ -42,13 +44,13 @@ const Details = ({ route, navigation }) => {
         paddingVertical: SIZES.font,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: colors.overlay,
         zIndex: 1,
       }}>
         <RectButton 
           minWidth={170}
           fontSize={SIZES.large}
-          {...SHADOWS.dark}
+          {...shadows.dark}
         />
       </View>
       <FlatList 
@@ -67,7 +69,7 @@ const Details = ({ route, navigation }) => {
                 <Text style={{
                   fontSize: SIZES.font,
                   fontFamily: FONTS.semiBold,
-                  color: COLORS.primary,
+                  color: colors.text,
                 }}>Current Bids</Text>
               )}
             </View>
