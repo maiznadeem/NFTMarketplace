@@ -1,64 +1,77 @@
-import { useEffect, useState } from 'react';
-import { View, SafeAreaView, FlatList } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View, FlatList, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getDatabase, ref, onValue } from '@react-native-firebase/database';
 
-import { COLORS } from '../constants'
+import { COLORS, FONTS, SIZES } from '../constants'
 import { HomeHeader, FocusedStatusBar, NFTCard } from '../components';
 
-import app from '../database/firebase'
-import { getDatabase, ref, onValue } from "firebase/database"
-
 const Home = () => {
-
-  const [nftData, setNftData] = useState()
-  const [firebaseNFTData, setFirebaseNFTData] = useState()
+  const insets = useSafeAreaInsets()
+  const [nftData, setNftData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
-    const db = getDatabase(app)
-    const dbRef = ref(db, 'NFTData')
-    onValue(dbRef, (snapshot) => {
-      setNftData(snapshot.val())
-      setFirebaseNFTData(snapshot.val())
-    })
-  }, [])
-  
-  const handleSearch = (value) => {
-    if (!value.length) return setFirebaseNFTData(nftData)
-    const filteredData = firebaseNFTData.filter((item) => 
-      item.name.toLowerCase().includes(value.toLowerCase())
+    const dbRef = ref(getDatabase(), 'NFTData')
+    const unsubscribe = onValue(
+      dbRef,
+      (snapshot) => {
+        const value = snapshot.val()
+        // Realtime Database returns an array or an object keyed by id; ignore null entries.
+        setNftData(value ? Object.values(value).filter(Boolean) : [])
+        setLoading(false)
+      },
+      (error) => {
+        console.warn('Failed to load NFTData', error)
+        setLoading(false)
+      }
     )
-    if (filteredData.length){
-      setFirebaseNFTData(filteredData)
-    } else {
-      setFirebaseNFTData(nftData)
-    }
-  }
+    return unsubscribe
+  }, [])
+
+  const visibleData = useMemo(() => {
+    const term = query.trim().toLowerCase()
+    if (!term) return nftData
+    return nftData.filter((item) => item.name?.toLowerCase().includes(term))
+  }, [nftData, query])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <FocusedStatusBar background={ COLORS.primary } />
+    <View style={{ flex: 1, paddingTop: insets.top }}>
+      <FocusedStatusBar barStyle='light-content' backgroundColor='transparent' translucent={true} />
       <View style={{ flex: 1 }}>
         <View style={{ zIndex: 0 }}>
           <FlatList
-            data={firebaseNFTData}
+            data={visibleData}
             renderItem={({ item }) => <NFTCard data={item} />}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => String(item.id ?? index)}
             showsVerticalScrollIndicator={false}
-            ListHeaderComponent={ <HomeHeader onSearch={handleSearch}/> }
+            ListHeaderComponent={ <HomeHeader onSearch={setQuery}/> }
+            ListEmptyComponent={
+              <Text style={{
+                textAlign: 'center',
+                marginTop: SIZES.extraLarge,
+                fontFamily: FONTS.regular,
+                color: COLORS.gray,
+              }}>
+                {loading ? 'Loading...' : 'No NFTs found'}
+              </Text>
+            }
           />
         </View>
         <View style={{
           position: 'absolute',
-          top: 0,
+          top: -insets.top,
           bottom: 0,
           right: 0,
           left: 0,
           zIndex:-1,
         }}>
-          <View style={{ height: 300, backgroundColor: COLORS.primary }} />
+          <View style={{ height: 300 + insets.top, backgroundColor: COLORS.primary }} />
           <View style={{ flex: 1, backgroundColor: COLORS.white }} />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 

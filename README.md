@@ -1,4 +1,4 @@
-![Banner Image](https://github.com/MaizNadeem/NFT-Marketplace/blob/main/images/AppBanner.png)
+![Banner Image](images/AppBanner.png)
 
 # Modern NFT Marketplace App
 
@@ -14,26 +14,47 @@ This repository contains the source code for a modern NFT Marketplace app built 
 ## Screenshots
 
 <div align="center">
-  <img src="https://github.com/MaizNadeem/NFT-Marketplace/blob/main/images/Image%201.jpg" alt="Home Page" width="200px" style="margin-right: 20px" />
-  <img src="https://github.com/MaizNadeem/NFT-Marketplace/blob/main/images/Image%202.jpg" alt="Details Page" width="200px" />
+  <img src="images/Image%201.jpg" alt="Home Page" width="200px" style="margin-right: 20px" />
+  <img src="images/Image%202.jpg" alt="Details Page" width="200px" />
 </div>
 
 ## Download
 
-You can download the Android build of the app from here: [NFT Marketplace App (apk)]()
+You can download the Android build of the app from here: [NFT Marketplace App (apk)](https://github.com/maiznadeem/NFTMarketplace/releases/latest)
 
-## Deployment
+## Development
 
-Follow the steps below to run the app locally on your own device:
+1. Clone this repository and run `npm install`.
+2. Start Metro with `npm start`. Firebase is native, so use a development build (`npx expo run:android`), not Expo Go.
 
-1. Clone this repository.
-2. Install the required dependencies using `npm install` or `yarn install`.
-3. Run the app on an emulator or physical device using `npm start` or `yarn start`.
+## Build a release APK
+
+Requires the Android SDK, a JDK, and the release keystore (the password is read from the local secret store).
+
+```
+npm run build:android
+```
+
+This runs `expo prebuild --clean`, `gradlew assembleRelease`, and writes `dist/NFTMarketplace-v<version>.apk` plus a `.sha256` file. `android/` is generated and not committed. Signing is wired in by `plugins/withReleaseSigning.js` from the Gradle properties `NFT_STORE_FILE`, `NFT_STORE_PASSWORD`, `NFT_KEY_ALIAS` and `NFT_KEY_PASSWORD`.
+
+## Versioning
+
+`package.json` `version` is the single source of truth. `app.config.js` derives the Android `versionCode` as `major * 10000 + minor * 100 + patch` (2.0.0 -> 20000). Bump it with `npm run version:patch`, `version:minor` or `version:major`.
+
+To release, build the APK, then tag and publish it:
+
+```
+git tag v<version> && git push origin v<version>
+gh release create v<version> dist/NFTMarketplace-v<version>.apk dist/NFTMarketplace-v<version>.apk.sha256 --title "NFTMarketplace v<version>"
+```
+
+Always sign with the same release keystore, or Android will refuse to install the update over an existing install.
 
 ## Technologies Used
 
-- React Native Expo
-- Firebase Realtime Database
+- React Native with Expo SDK 58
+- React Native Firebase (Realtime Database)
+- Firebase Hosting (NFT and profile images, `hosting/`)
 - React Navigation
 
 ## Contributing
