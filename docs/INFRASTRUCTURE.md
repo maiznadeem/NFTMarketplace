@@ -20,7 +20,7 @@ Android app (com.himaiz.nftmarketplace)
 | Billing plan | **Spark (free)**, with no billing account linked. The project must stay on the free tier. |
 | Ownership | One owner account (IAM `roles/owner`). No other human members. |
 | Registered apps | Android only: `com.himaiz.nftmarketplace`, app ID `1:235187590207:android:9868847070ef85f419d48a`, with release SHA-1 and SHA-256 registered. No Web or iOS apps. |
-| **Realtime Database** | Default instance `https://nft-marketplace-d54bc-default-rtdb.firebaseio.com` (us-central1). Holds `NFTData`, 7 items with artwork embedded as base64 `data:` URIs (about 290 KB). Source images are in [`data/images/`](../data/images). |
+| **Realtime Database** | Default instance `https://nft-marketplace-d54bc-default-rtdb.firebaseio.com` (us-central1). Holds `NFTData`: 7 items, about 123 KB. Artwork is embedded as WebP `data:` URIs at display size (about 1080 px wide, quality 74). Bid avatars are keys (`person02`…) that the app resolves to images bundled in the APK. Built from [`data/nfts.json`](../data/nfts.json) and [`data/images/`](../data/images) by [`scripts/seed-database.mjs`](../scripts/seed-database.mjs). The app keeps a disk cache (RTDB persistence) and only goes online once App Check has a token. |
 | **App Check** | Play Integrity provider, enforced on the Realtime Database (see [Bot protection](#bot-protection-app-check)). |
 | Firebase Hosting | **Disabled.** The default site `nft-marketplace-d54bc.web.app` / `.firebaseapp.com` has a `SITE_DISABLE` release (2026-11-21) and returns 404. Nothing is deployed and no domain is attached. |
 | Cloud Storage | **None.** Both legacy `appspot.com` buckets were deleted (Storage needs Blaze). The Storage APIs are still enabled but unused. |
@@ -44,7 +44,7 @@ Nothing deploys automatically. Each part is deployed by hand:
 |---|---|
 | **Android app** | `npm run version:*` → `npm run build:android` (local Gradle build, signed by `plugins/withReleaseSigning.js`) → `git tag vX.Y.Z` → `gh release create` with the APK and `.sha256`. Users sideload the update; there's no store auto-update. |
 | **Database rules** | Source of truth: [`database.rules.json`](../database.rules.json), referenced by [`firebase.json`](../firebase.json). Deploy with `firebase deploy --only database --project nft-marketplace-d54bc` from an owner account, or paste into Console → Realtime Database → Rules. The live rules matched the file on 2026-11-22. |
-| **Database data** | Written by an owner through the REST API or Console (owner OAuth bypasses rules and App Check). No seed or migration tooling is in the repo. |
+| **Database data** | `node scripts/seed-database.mjs --dry-run` builds and sizes the payload; `--write` replaces `NFTData` using the current gcloud login (an owner; owner OAuth bypasses rules and App Check). The source of truth is `data/nfts.json` plus `data/images/`. |
 | **Indexes** | None. The rules have no `.indexOn`, and the app reads the whole `NFTData` node. |
 | **Functions / Hosting** | None deployed. Hosting is disabled. |
 | **App Check, API keys** | Console or REST, by hand (see below). |
@@ -57,7 +57,7 @@ Nothing deploys automatically. Each part is deployed by hand:
 | **Database rules** | `git revert` the rules change and redeploy. Console → Rules also keeps a history with one-click rollback. |
 | **App Check enforcement** | Emergency switch: Console → App Check → APIs → Realtime Database → **Unenforce**, or set the database service's `enforcementMode` to `UNENFORCED` via the App Check REST API. It takes effect within minutes and makes the data publicly readable again. Re-enforce afterwards. |
 | **API key restrictions** | Google Cloud Console → APIs & Services → Credentials → edit the key. Restrictions apply within minutes. |
-| **Data** | Spark has no automated RTDB backups. Restore by re-writing `NFTData` from a JSON export (Console → Realtime Database → ⋮ → Export/Import). Keep a current export before changing data; see the finding below. |
+| **Data** | Spark has no automated RTDB backups. Restore by re-running `node scripts/seed-database.mjs --write` from the commit you want, or import a JSON export (Console → Realtime Database → ⋮ → Export/Import). |
 | **Hosting** | Nothing to roll back; the site is disabled. |
 
 ## Cloudflare
@@ -109,5 +109,5 @@ Names and locations only; never commit values.
 - **Browser API key recreated.** A "Browser key (auto created by Firebase)" exists again, created on 2026-11-21 at 17:13 UTC. The earlier one was deleted along with the Web app. Firebase most likely recreated it when the App Check and Play Integrity APIs were enabled.
   - It has **no application restriction** and a broad API allow-list (Database, Storage, Firestore, Hosting and more).
   - No app or repo file contains it, and App Check plus the rules still block data access. Even so, it should be **deleted or restricted**.
-- **No data export in the repo.** `NFTData` exists only in the live database, plus a local export on the maintainer's machine. Spark has no automated backups. Commit a sanitized export, or document where the canonical copy lives.
+- ~~No data export in the repo~~ **Resolved in v2.2.0:** `data/nfts.json`, `data/images/` and `scripts/seed-database.mjs` rebuild `NFTData`.
 - **Unused APIs enabled:** Firebase Hosting and the Cloud Storage APIs are enabled with nothing deployed. That's harmless, but they could be disabled.

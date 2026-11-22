@@ -1,7 +1,8 @@
-import { View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 
-import { SIZES, assets } from '../constants'
+import { SIZES, assets, imageSource } from '../constants'
 import { useTheme } from '../context/ThemeContext';
 import { CircleButton, RectButton } from './Button';
 import { SubInfo, EthPrice, NFTTitle } from './SubInfo';
@@ -22,8 +23,10 @@ const NFTCard = ({ data }) => {
     }}>
       <View style={{ width: '100%', height: 250 }}>
         <Image 
-        source={{uri: data.image}}
-        resizeMode= 'cover'
+        source={imageSource(data.image)}
+        contentFit='cover'
+        transition={150}
+        recyclingKey={String(data.id)}
         style={{
           height: '100%',
           width: '100%',

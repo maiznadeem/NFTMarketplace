@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getDatabase, ref, onValue } from '@react-native-firebase/database';
+import { ref, onValue } from '@react-native-firebase/database';
 
 import { FONTS, SIZES } from '../constants'
 import { useTheme } from '../context/ThemeContext';
 import { HomeHeader, FocusedStatusBar, NFTCard } from '../components';
 import { appCheckReady } from '../firebase/appCheck';
+import { dbReady } from '../firebase/db';
+import { hideSplash } from '../utils/splash';
 
 const Home = () => {
   const insets = useSafeAreaInsets()
@@ -18,36 +20,50 @@ const Home = () => {
 
   useEffect(() => {
     let loaded = false
+    let unsubscribe = () => {}
+    let cancelled = false
     const fail = () => {
       if (loaded) return
       setLoadFailed(true)
       setLoading(false)
     }
-    const dbRef = ref(getDatabase(), 'NFTData')
-    const unsubscribe = onValue(
-      dbRef,
-      (snapshot) => {
-        loaded = true
-        const value = snapshot.val()
-        // Realtime Database returns an array or an object keyed by id; ignore null entries.
-        setNftData(value ? Object.values(value).filter(Boolean) : [])
-        setLoadFailed(false)
-        setLoading(false)
-      },
-      (error) => {
-        console.warn('Failed to load NFTData', error)
-        fail()
-      }
-    )
+    // dbReady: persistence on, offline until App Check has a token. The listener fires straight
+    // from the disk cache when there is one, then live once connected.
+    dbReady.then((db) => {
+      if (cancelled) return
+      unsubscribe = onValue(
+        ref(db, 'NFTData'),
+        (snapshot) => {
+          const value = snapshot.val()
+          // Marker for cold-start measurements (time to first real content, read from logcat).
+          if (!loaded) console.log(`FIRST_CONTENT items=${value ? Object.keys(value).length : 0}`)
+          loaded = true
+          // Realtime Database returns an array or an object keyed by id; ignore null entries.
+          setNftData(value ? Object.values(value).filter(Boolean) : [])
+          setLoadFailed(false)
+          setLoading(false)
+        },
+        (error) => {
+          console.warn('Failed to load NFTData', error)
+          fail()
+        }
+      )
+    })
     // The database requires App Check. On a device that can't be attested, reads are refused without
     // an error callback, so report the failure instead of showing "Loading..." forever.
     appCheckReady.then((ok) => { if (!ok) fail() })
     const timeout = setTimeout(fail, 15000)
     return () => {
+      cancelled = true
       clearTimeout(timeout)
       unsubscribe()
     }
   }, [])
+
+  // Hide the native splash once the list has content (or a failure message) to show.
+  useEffect(() => {
+    if (!loading) hideSplash()
+  }, [loading])
 
   const visibleData = useMemo(() => {
     const term = query.trim().toLowerCase()

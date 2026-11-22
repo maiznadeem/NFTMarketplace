@@ -1,0 +1,183 @@
+[
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-11",
+        "image": "person02",
+        "name": "Jessica Tan",
+        "price": 4.25
+      },
+      {
+        "date": "December 27, 2019 at 1:50 PM",
+        "id": "BID-12",
+        "image": "person03",
+        "name": "Jennifer Sia",
+        "price": 4.5
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-13",
+        "image": "person04",
+        "name": "Rosie Wong",
+        "price": 4.75
+      }
+    ],
+    "creator": "Putri Intan",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural.",
+    "id": "NFT-01",
+    "image": "nfts/nft01.jpeg",
+    "name": "Abstracto #312",
+    "price": 4.25
+  },
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-21",
+        "image": "person04",
+        "name": "Jessica Tan",
+        "price": 7.05
+      }
+    ],
+    "creator": "Siti Nurhaliza",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. Nulla sed velit erat vitae leo sem inceptos diam fames arcu hendrerit, quis ultrices in eleifend posuere ipsum conubia porttitor felis.",
+    "id": "NFT-02",
+    "image": "nfts/nft02.jpeg",
+    "name": "Green Coins",
+    "price": 7.25
+  },
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-31",
+        "image": "person02",
+        "name": "Jessica Tan",
+        "price": 95.25
+      },
+      {
+        "date": "December 27, 2019 at 1:50 PM",
+        "id": "BID-32",
+        "image": "person03",
+        "name": "Jennifer Sia",
+        "price": 95.5
+      }
+    ],
+    "creator": "Elisabeth aho",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. Lorem ipsum dolor sit amet consectetur adipiscing elit consequat accumsan sapien, lectus convallis malesuada odio curae habitasse dignissim nascetur. Nulla sed velit erat vitae leo sem inceptos diam fames arcu hendrerit, quis ultrices in eleifend posuere ipsum conubia porttitor felis. Lorem ipsum dolor sit amet consectetur adipiscing elit consequat accumsan sapien, lectus convallis malesuada odio curae habitasse dignissim nascetur. Nulla sed velit erat vitae leo sem inceptos diam fames arcu hendrerit, quis ultrices in eleifend posuere ipsum conubia porttitor felis.",
+    "id": "NFT-03",
+    "image": "nfts/nft03.jpeg",
+    "name": "NFT coins race",
+    "price": 95.25
+  },
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-41",
+        "image": "person02",
+        "name": "Jessica Tan",
+        "price": 56.25
+      },
+      {
+        "date": "December 27, 2019 at 1:50 PM",
+        "id": "BID-42",
+        "image": "person03",
+        "name": "Jennifer Sia",
+        "price": 54.25
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-43",
+        "image": "person04",
+        "name": "Rosie Wong",
+        "price": 55.15
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-44",
+        "image": "person02",
+        "name": "Vincent Swift",
+        "price": 54.15
+      }
+    ],
+    "creator": "Putri Intan",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural.Lorem ipsum dolor sit amet consectetur adipiscing elit consequat accumsan sapien, lectus convallis malesuada odio curae habitasse dignissim nascetur.",
+    "id": "NFT-04",
+    "image": "nfts/nft04.jpeg",
+    "name": "Nifty NFT",
+    "price": 54.25
+  },
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-51",
+        "image": "person02",
+        "name": "Jessica Tan",
+        "price": 10.25
+      }
+    ],
+    "creator": "David doe",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural.",
+    "id": "NFT-05",
+    "image": "nfts/nft05.jpeg",
+    "name": "Colorful circles",
+    "price": 10.25
+  },
+  {
+    "bids": [
+      {
+        "date": "December 12, 2019 at 12:10 PM",
+        "id": "BID-61",
+        "image": "person02",
+        "name": "Jessica Tan",
+        "price": 20.25
+      },
+      {
+        "date": "December 27, 2019 at 1:50 PM",
+        "id": "BID-62",
+        "image": "person03",
+        "name": "Jennifer Sia",
+        "price": 20.5
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-63",
+        "image": "person04",
+        "name": "Rosie Wong",
+        "price": 20.75
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-64",
+        "image": "person02",
+        "name": "Siti Nurhaliza",
+        "price": 21.25
+      },
+      {
+        "date": "December 31, 2019 at 3:50 PM",
+        "id": "BID-65",
+        "image": "person02",
+        "name": "Kaitlyn Lee",
+        "price": 7.25
+      }
+    ],
+    "creator": "Leo Messi",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. Lorem ipsum dolor sit amet consectetur adipiscing elit consequat accumsan sapien, lectus convallis malesuada odio curae habitasse dignissim nascetur. Nulla sed velit erat vitae leo sem inceptos diam fames arcu hendrerit, quis ultrices in eleifend posuere ipsum conubia porttitor felis.",
+    "id": "NFT-06",
+    "image": "nfts/nft06.jpeg",
+    "name": "Black box model",
+    "price": 20.25
+  },
+  {
+    "creator": "Victor de la Cruz",
+    "description": "The action painter abstract expressionists were directly influenced by automatism. Pollock channelled this into producing gestural. Lorem ipsum dolor sit amet consectetur adipiscing elit consequat accumsan sapien, lectus convallis malesuada odio curae habitasse dignissim nascetur. Nulla sed velit erat vitae leo sem inceptos diam fames arcu hendrerit, quis ultrices in eleifend posuere ipsum conubia porttitor felis. Ullamcorper platea penatibus ornare egestas nulla ligula hendrerit nisl suscipit sociosqu maximus, tincidunt aptent habitant purus pharetra ultrices dapibus laoreet nisi lacinia. Porta malesuada netus vel sapien conubia porttitor aliquam ut pretium ante litora molestie senectus magna egestas sociosqu, eget aliquet fames pharetra felis posuere varius fringilla quisque in arcu montes eu ullamcorper.",
+    "id": "NFT-07",
+    "image": "nfts/nft07.jpeg",
+    "name": "Abstracto soulful art",
+    "price": 10.25,
+    "bids": []
+  }
+]

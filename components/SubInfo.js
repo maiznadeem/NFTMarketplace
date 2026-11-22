@@ -1,4 +1,5 @@
 import { View, Text, Image } from 'react-native';
+import { Image as CachedImage } from 'expo-image';
 import { SIZES, FONTS, assets } from '../constants';
 import { useTheme } from '../context/ThemeContext';
 
@@ -40,9 +41,9 @@ export const EthPrice = ({ price }) => {
 
 export const ImageCmp = ({ imgUrl, index }) => {
     return (
-        <Image 
+        <CachedImage 
         source={imgUrl}
-        resizeMode='contain'
+        contentFit='contain'
         style={{
             width: 48,
             height: 48,

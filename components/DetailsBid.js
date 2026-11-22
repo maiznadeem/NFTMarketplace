@@ -1,6 +1,7 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { EthPrice } from './SubInfo';
-import { SIZES, FONTS } from '../constants';
+import { SIZES, FONTS, imageSource } from '../constants';
 import { useTheme } from '../context/ThemeContext';
 
 const DetailsBid = ({ bid }) => {
@@ -15,8 +16,8 @@ const DetailsBid = ({ bid }) => {
         paddingHorizontal: SIZES.base*2,
     }}>
       <Image
-        source={{uri: bid.image}}
-        resizeMode='contain'
+        source={imageSource(bid.image)}
+        contentFit='contain'
         style={{ width: 48, height: 48 }}
       />
       <View>
