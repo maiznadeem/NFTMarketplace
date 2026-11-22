@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, Image, StatusBar, FlatList } from 'react-native';
+import { View, Text, StatusBar, FlatList } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SIZES, FONTS, assets } from '../constants';
+import { SIZES, FONTS, assets, imageSource } from '../constants';
 import { useTheme } from '../context/ThemeContext';
 import { CircleButton, RectButton, SubInfo, FocusedStatusBar, DetailsDesc, DetailsBid } from '../components';
 
 const DetailsHeader = ({data, navigation}) => (
   <View style={{ width: '100%', height: 373 }}>
     <Image 
-      source={{uri: data.image}}
-      resizeMode='cover'
+      source={imageSource(data.image)}
+      contentFit='cover'
       style={{ width: '100%', height: '100%' }}
     />
     <CircleButton 

@@ -45,6 +45,7 @@
 - **Rich details:** artwork, creator, price, description and the full bid history for every piece.
 - **Light and dark themes:** follows your system by default. A one-tap toggle overrides it and is remembered.
 - **Locked-down backend:** only the genuine app on a genuine device can read the data (see [Security](#security)).
+- **Fast start:** offline-first data cache, natively embedded fonts and display-sized WebP artwork. Returning users see the collection in about 0.4 s (see [Performance](#performance)).
 - **Polished native feel:** edge-to-edge layout, adaptive and themed app icon, and a branded splash screen.
 
 ## Install
@@ -68,6 +69,26 @@ The backend is built to serve this app and nothing else.
 
 The full infrastructure picture is in **[docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md)**: the Firebase project and services, CI/CD, rollback, Cloudflare (not used, by design), keys and their restrictions, App Check and rules.
 
+## Performance
+
+Measured for v2.2.0 against v2.1.0 on the same emulator (x86_64, API 35). The metric is the time from app launch to the first real content (the NFT list), median of 7 cold starts.
+
+| | v2.1.0 | v2.2.0 | Change |
+|---|---:|---:|---:|
+| Cold start, returning user | 3.15 s | **0.40 s** | −87% |
+| Cold start, first launch (no cache) | 4.63 s | **3.88 s** | −16% |
+| APK size | 80.6 MB | **43.9 MB** | −45% |
+| Database payload | 293 KB | **123 KB** | −58% |
+
+How it got there:
+- **Offline-first data.** Realtime Database disk persistence shows the last synced collection instantly. The client stays offline until App Check has its token (fetched at launch), so nothing reaches the database unattested.
+- **Native splash until content.** The splash stays up until the list has content, with a failsafe timeout, so there's never an empty frame.
+- **Fonts embedded at build time** instead of loading at startup.
+- **Display-sized WebP artwork** (about 1080 px, quality 74). Bid avatars come from images already bundled in the app. expo-image renders with memory caching.
+- **ARM-only release builds** (`arm64-v8a`, `armeabi-v7a`), so no emulator x86 libraries ship.
+
+On a first launch, most of the remaining time is the App Check attestation plus the first database round trip.
+
 ## Tech stack
 
 | | |
@@ -76,8 +97,9 @@ The full infrastructure picture is in **[docs/INFRASTRUCTURE.md](docs/INFRASTRUC
 | **Navigation** | React Navigation 7 (stack) |
 | **Backend** | React Native Firebase: Realtime Database and App Check (Play Integrity) |
 | **Theming** | Context-based light and dark palettes, persisted with AsyncStorage |
-| **Typography** | Inter |
-| **Builds** | Local Gradle release builds, signed through an Expo config plugin |
+| **Typography** | Inter, embedded natively |
+| **Images** | expo-image, WebP artwork |
+| **Builds** | Local Gradle release builds (ARM only), signed through an Expo config plugin |
 
 ## Project structure
 
@@ -88,8 +110,8 @@ components/            Cards, header, buttons, theme toggle
 context/ThemeContext   Light/dark palettes and the saved preference
 firebase/appCheck.js   App Check setup (Play Integrity; debug token for emulators)
 plugins/               Expo config plugins: release signing, CMake pin, no force-dark
-scripts/               build-android.ps1: signed release APK and checksum
-data/images/           Source artwork stored in the database
+scripts/               build-android.ps1 (signed release APK) and seed-database.mjs (rebuilds NFTData)
+data/                  nfts.json and images/: the source for the NFTData database node
 docs/                  Infrastructure, deploy and operations notes
 ```
 

@@ -37,7 +37,23 @@ module.exports = {
           backgroundColor: NAVY,
         },
       ],
-      'expo-font',
+      // Embed Inter natively: no runtime font loading at startup. Family names are the file names.
+      [
+        'expo-font',
+        {
+          fonts: ['Bold', 'SemiBold', 'Medium', 'Regular', 'Light'].map((w) => `./assets/fonts/Inter-${w}.ttf`),
+        },
+      ],
+      // Ship only real-device ABIs (drops x86/x86_64, about 37 MB). NFT_BUILD_ARCHS overrides it for
+      // emulator test builds, e.g. NFT_BUILD_ARCHS=x86_64.
+      [
+        'expo-build-properties',
+        {
+          android: {
+            buildArchs: (process.env.NFT_BUILD_ARCHS || 'arm64-v8a,armeabi-v7a').split(','),
+          },
+        },
+      ],
       './plugins/withReleaseSigning',
       './plugins/withCmakeVersion',
       './plugins/withNoForceDark',
