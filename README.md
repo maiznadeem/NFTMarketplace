@@ -66,6 +66,8 @@ The backend is built to serve this app and nothing else.
 
 > Rooted devices, custom ROMs and emulators can't pass device integrity, so they show *"Couldn't load NFTs on this device."*
 
+The full infrastructure picture is in **[docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md)**: the Firebase project and services, CI/CD, rollback, Cloudflare (not used, by design), keys and their restrictions, App Check and rules.
+
 ## Tech stack
 
 | | |
@@ -88,6 +90,7 @@ firebase/appCheck.js   App Check setup (Play Integrity; debug token for emulator
 plugins/               Expo config plugins: release signing, CMake pin, no force-dark
 scripts/               build-android.ps1: signed release APK and checksum
 data/images/           Source artwork stored in the database
+docs/                  Infrastructure, deploy and operations notes
 ```
 
 ## Development
